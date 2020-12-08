@@ -1,0 +1,8 @@
+`use strict`;
+
+const NUMBER_COMMENTS = 1; 
+const BOX_WIDTH = 48;
+const FIELD_WIDTH = 50;
+const FIELD_HEIGHT = 5;
+
+export {NUMBER_COMMENTS, BOX_WIDTH, FIELD_WIDTH, FIELD_HEIGHT}
