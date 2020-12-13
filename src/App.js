@@ -1,13 +1,13 @@
 import React from 'react';
 import CommentInput from './components/CommentInput.js';
-import {NUMBER_COMMENTS} from './constants/constants.js';
 import CommentsList from './containers/CommentsList.js';
+import {NUMBER_COMMENTS, TIME_LOCALE, TIME_OPTIONS, STORAGE_OLD_COMMENTS} from './constants/constants.js';
 
 export default class App extends React.Component {
 	constructor(props){
 		super(props);
 		this.onChangeComment = this.onChangeComment.bind(this);
-		this.addNewComment = this.addNewComment.bind(this);
+		this.addComment = this.addComment.bind(this);
 		this.deleteComment = this.deleteComment.bind(this);
 		this.state = {
 			comments:[{
@@ -16,59 +16,60 @@ export default class App extends React.Component {
 				dateTime: ``,
 			}],
 			newAuthor:``,
-			newText:``,
+			newText:``
 		}	
 	};
 
-	onChangeComment(event) { this.setState({ [event.target.name]: event.target.value }) }
+	onChangeComment(event) { this.setState({ [event.target.name]: event.target.value }) }; 
 
-	addNewComment(event){
+	addComment(event){
 		event.preventDefault();
-		const comment = this.state.comments;
 
-		comment.unshift({
-			author: this.state.newAuthor,
-			text: this.state.newText,
-			dateTime: new Date().toLocaleTimeString(`ru` , {day: `numeric`, month: `numeric`, year: `numeric`}),
+		const {comments, newAuthor, newText} = this.state;
+		const nowDateTime = new Date().toLocaleTimeString(TIME_LOCALE, TIME_OPTIONS);
+
+		comments.unshift({
+			author: newAuthor,
+			text: newText,
+			dateTime: nowDateTime
 		});
 
 		this.setState({
-			comments: comment,
+			comments,
 			newAuthor:``,
 			newText:``,
 		});
 
-		localStorage.setItem(`oldComment`, JSON.stringify(comment));
+		localStorage.setItem(STORAGE_OLD_COMMENTS, JSON.stringify(comments));
 	}
 	
 	deleteComment(key){
-		const comment = this.state.comments;
+		const comments = this.state.comments.filter( (elem, id) => id !== key );
+		
+		this.setState({comments});
 
-		comment.splice(key, NUMBER_COMMENTS);
-
-		this.setState({comments: comment});
-
-		localStorage.setItem(`oldComment`, JSON.stringify(comment));
+		localStorage.setItem(STORAGE_OLD_COMMENTS, JSON.stringify(comments));
 	}
 
 	componentDidMount() {
-		const oldComment = JSON.parse( localStorage.getItem(`oldComment`) );
-		
-		if (oldComment !== null) this.setState({comments: oldComment})
+		const oldComments = JSON.parse( localStorage.getItem(STORAGE_OLD_COMMENTS) );
+
+		if (oldComments !== null) this.setState({comments: oldComments})
 	}
 
 	render(){
+		const {comments, newAuthor, newText} = this.state;
 		return(
 			<div>
 				<CommentInput 
-					newAuthor={this.state.newAuthor}
-					newText={this.state.newText}
+					newAuthor={newAuthor}
+					newText={newText}
 					onChangeComment={this.onChangeComment}
-					addNewComment={this.addNewComment}
+					addComment={this.addComment}
 				/>
-				<CommentsList 
-					comments={this.state.comments}
-					deleteComment={ this.deleteComment.bind(this) }
+				<CommentsList
+					comments={comments}
+					deleteComment={this.deleteComment}
 				/>	
 			</div>
 		)
