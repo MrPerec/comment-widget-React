@@ -14,7 +14,8 @@ function CommentsList(props) {
 					author={elem.author}
 					text={elem.text}
 					dateTime={elem.dateTime}
-					deleteComment={ deleteComment.bind(props, id) }
+					//deleteComment={ deleteComment.bind(props, id) } //work
+					deleteComment={ (props) => deleteComment(id, props) }
 				/>
 			)
 		}
