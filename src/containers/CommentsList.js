@@ -4,21 +4,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CommentDisplay from '../components/CommentDisplay.js';
 
-function CommentsList(props) {
-	const {comments, deleteComment} = props;
-	const commentsList = comments.map( (elem, id) => {
-		if (elem.dateTime !== ``) {
-			return(
-				<CommentDisplay 
-					key={id}
-					author={elem.author}
-					text={elem.text}
-					dateTime={elem.dateTime}
-					//deleteComment={ deleteComment.bind(props, id) } //work
-					deleteComment={ (props) => deleteComment(id, props) }
-				/>
-			)
-		}
+function CommentsList( {comments, deleteComment} ) {
+	const commentsList = comments.map( ( {author, text, dateTime, id} ) => {
+		return(
+			<CommentDisplay 
+				key={id}
+				author={author}
+				text={text}
+				dateTime={dateTime}
+				deleteComment={ deleteComment.bind(comments, id) }
+			/>
+		)
 	})
 	return(
 		<div>{commentsList}</div>

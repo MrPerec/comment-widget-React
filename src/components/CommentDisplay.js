@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '../styles/style.css';
 
-function CommentDisplay({author, text, dateTime, deleteComment}) {
+function CommentDisplay( {author, text, dateTime, deleteComment} ) {
 	return(
 		<div className='comment'>
 			<div className='container'>{author}</div>

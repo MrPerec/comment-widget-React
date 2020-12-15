@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import '../styles/style.css';
 import {BOX_WIDTH, FIELD_WIDTH, FIELD_HEIGHT} from '../constants/constants.js';
 
-function CommentInput({newAuthor, newText, onChangeComment, addComment}) {
+function CommentInput( {newAuthor, newText, onChangeComment, addComment} ) {
 	return(
 		<form onSubmit={addComment}>
 			<input 
