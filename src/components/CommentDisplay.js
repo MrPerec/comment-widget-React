@@ -4,23 +4,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '../styles/style.css';
 
-function CommentDisplay( {author, text, dateTime, id, deleteComment} ) {
+function CommentDisplay( {comment, deleteComment} ) {
+	const {author, text, dateTime, id} = comment;
+	const onButtonClick = () => deleteComment(id);
 	return(
 		<div className='comment'>
 			<div className='container'>{author}</div>
 			<div className='container'>{text}</div>
 			<div className='container'>{dateTime}</div>
-			<button className='button' onClick={ () => deleteComment(id) }>Удалить</button>
+			<button className='button' onClick={onButtonClick}>Удалить</button>
 		</div>
 	)
 }
 
 CommentDisplay.propTypes = {
-	author: PropTypes.string.isRequired,
-	text: PropTypes.string.isRequired,
-	dateTime: PropTypes.string.isRequired,
-	id: PropTypes.string.isRequired,
+	comment: PropTypes.object.isRequired,
 	deleteComment: PropTypes.func.isRequired
 }
+
 
 export default CommentDisplay

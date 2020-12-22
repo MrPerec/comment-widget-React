@@ -1,9 +1,9 @@
 import React from 'react';
 import CommentInput from './components/CommentInput.js';
 import CommentsList from './components/CommentsList.js';
-import {TIME_LOCALE, TIME_OPTIONS, STORAGE_OLD_COMMENTS} from './constants/constants.js';
+import {TIME_LOCALE, TIME_OPTIONS, STORAGE_COMMENTS} from './constants/constants.js';
 
-export default class App extends React.Component {
+export default class App extends React.PureComponent {
 	constructor(props){
 		super(props);
 		this.onChangeComment = this.onChangeComment.bind(this);
@@ -26,7 +26,7 @@ export default class App extends React.Component {
 	addComment(event){
 		event.preventDefault();
 
-		const {comments, newAuthor, newText} = {...this.state};
+		const {comments, newAuthor, newText} = JSON.parse(JSON.stringify(this.state));
 		const nowDateTime = new Date().toLocaleTimeString(TIME_LOCALE, TIME_OPTIONS);
 		const uuid = getUuid();
 		
@@ -43,7 +43,7 @@ export default class App extends React.Component {
 			newText:``
 		});
 
-		localStorage.setItem(STORAGE_OLD_COMMENTS, JSON.stringify(comments));
+		localStorage.setItem(STORAGE_COMMENTS, JSON.stringify(comments));
 	}
 	
 	deleteComment(key){
@@ -51,14 +51,13 @@ export default class App extends React.Component {
 
 		this.setState({comments});
 
-		localStorage.setItem(STORAGE_OLD_COMMENTS, JSON.stringify(comments));
+		localStorage.setItem(STORAGE_COMMENTS, JSON.stringify(comments));
 	}
 
 	componentDidMount() {
-		const oldComments = JSON.parse( localStorage.getItem(STORAGE_OLD_COMMENTS) );
+		const saveComments = JSON.parse( localStorage.getItem(STORAGE_COMMENTS) );
 
-		//this.setState({comments: oldComments});
-		if (oldComments !== null) this.setState({comments: oldComments})
+		if (saveComments !== null) this.setState({comments: saveComments})
 	}
 
 	render(){
@@ -80,6 +79,4 @@ export default class App extends React.Component {
 	}
 }
 
-function getUuid() {
- 	return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15 >> c/4).toString(16));
- } 
+const getUuid = () => ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15 >> c/4).toString(16));

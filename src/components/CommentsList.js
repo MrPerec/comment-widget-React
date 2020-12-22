@@ -6,16 +6,21 @@ import CommentDisplay from './CommentDisplay.js';
 
 function CommentsList( {comments, deleteComment} ) {
 	const commentsList = comments.map( ( {author, text, dateTime, id} ) => {
-		return(
-			<CommentDisplay 
-				key={id}
-				author={author}
-				text={text}
-				dateTime={dateTime}
-				id={id}
-				deleteComment={deleteComment}
-			/>
-		)
+		if (dateTime !==``){ 
+			const comment = { 
+				author: author,
+				text: text,
+				dateTime: dateTime,
+				id: id
+			};
+			return(
+				<CommentDisplay 
+					key={id}
+					comment={comment} 
+					deleteComment={deleteComment}
+				/>
+			)
+		}
 	})
 	return(
 		<div>{commentsList}</div>
