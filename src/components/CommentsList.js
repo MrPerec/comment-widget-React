@@ -5,13 +5,16 @@ import PropTypes from 'prop-types';
 import CommentDisplay from './CommentDisplay.js';
 
 function CommentsList( {comments, deleteComment} ) {
-	const commentsList = comments.map( ( {author, text, dateTime, id} ) => {
-		if (dateTime !==``){ 
+	const commentsList = comments.map( (obj) => {
+		let keysContents = ``;
+		for (const key in obj) keysContents += obj[key];
+		if (keysContents !== ``){
+			const {author, text, dateTime, id} = obj;
 			const comment = { 
-				author: author,
-				text: text,
-				dateTime: dateTime,
-				id: id
+				author,
+				text,
+				dateTime,
+				id
 			};
 			return(
 				<CommentDisplay 
@@ -20,7 +23,7 @@ function CommentsList( {comments, deleteComment} ) {
 					deleteComment={deleteComment}
 				/>
 			)
-		}
+		} 
 	})
 	return(
 		<div>{commentsList}</div>

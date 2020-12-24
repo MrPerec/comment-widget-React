@@ -1,7 +1,7 @@
 import React from 'react';
 import CommentInput from './components/CommentInput.js';
 import CommentsList from './components/CommentsList.js';
-import {TIME_LOCALE, TIME_OPTIONS, STORAGE_COMMENTS} from './constants/constants.js';
+import {STORAGE_COMMENTS} from './constants/constants.js';
 
 export default class App extends React.PureComponent {
 	constructor(props){
@@ -26,11 +26,15 @@ export default class App extends React.PureComponent {
 	addComment(event){
 		event.preventDefault();
 
-		const {comments, newAuthor, newText} = JSON.parse(JSON.stringify(this.state));
-		const nowDateTime = new Date().toLocaleTimeString(TIME_LOCALE, TIME_OPTIONS);
+		const {comments, newAuthor, newText} = this.state; 
+		const commentsCopy = [...comments]; 
+		const now = new Date();
+		const date = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`; 
+		const time = now.toLocaleTimeString();
+		const nowDateTime = `${date} ${time}`;
 		const uuid = getUuid();
-		
-		comments.unshift({
+
+		commentsCopy.unshift({ 
 			author: newAuthor,
 			text: newText,
 			dateTime: nowDateTime,
@@ -38,12 +42,12 @@ export default class App extends React.PureComponent {
 		});
 
 		this.setState({
-			comments,
+			comments: commentsCopy, 
 			newAuthor:``,
 			newText:``
 		});
 
-		localStorage.setItem(STORAGE_COMMENTS, JSON.stringify(comments));
+		localStorage.setItem(STORAGE_COMMENTS, JSON.stringify(commentsCopy)); 
 	}
 	
 	deleteComment(key){
@@ -55,9 +59,9 @@ export default class App extends React.PureComponent {
 	}
 
 	componentDidMount() {
-		const saveComments = JSON.parse( localStorage.getItem(STORAGE_COMMENTS) );
+		const savedComments = JSON.parse( localStorage.getItem(STORAGE_COMMENTS) ); 
 
-		if (saveComments !== null) this.setState({comments: saveComments})
+		if (savedComments !== null) this.setState({comments: savedComments}) 
 	}
 
 	render(){

@@ -11,7 +11,7 @@ function CommentDisplay( {comment, deleteComment} ) {
 		<div className='comment'>
 			<div className='container'>{author}</div>
 			<div className='container'>{text}</div>
-			<div className='container'>{dateTime}</div>
+			<div><time className='container' dateTime={dateTime}>{dateTime}</time></div>
 			<button className='button' onClick={onButtonClick}>Удалить</button>
 		</div>
 	)
