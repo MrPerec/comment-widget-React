@@ -9,21 +9,17 @@ module.exports = {
   entry: './index.js',
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'build.js'
+    filename: 'build.js',
   },
   optimization: {
-    minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
+    minimizer: [new TerserJSPlugin({ extractComments: false }), new OptimizeCSSAssetsPlugin({})],
   },
-  plugins: [
-    new HtmlWebpackPlugin({template: './index.html'}),
-    new MiniCssExtractPlugin({filename: 'build.css'}),
-  ],
+  plugins: [new HtmlWebpackPlugin({ template: './index.html' }), new MiniCssExtractPlugin({ filename: 'build.css' })],
   module: {
-    rules:
-    [
+    rules: [
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.js$/,
@@ -31,13 +27,10 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [
-              '@babel/preset-env', 
-              '@babel/preset-react'
-            ],
-          }
-        }
-      }
-    ]
-  }
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+          },
+        },
+      },
+    ],
+  },
 };
