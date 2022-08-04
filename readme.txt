@@ -1,6 +1,6 @@
 This is a comment widget made with React and classes.
 
-He can do the following:
+It can do the following:
 1. Displaying a list of comments: author, text, date and time;
 2. Adding a new comment;
 3. Deleting a comment;
