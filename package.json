@@ -1,7 +1,7 @@
 {
-  "name": "15.6_home_work",
+  "name": "comment-widget-React",
   "version": "1.0.0",
-  "description": "Home work for webpack",
+  "description": "Comment widget with React and bundling with webpack",
   "main": "index.js",
   "scripts": {
     "server": "webpack-dev-server",
@@ -13,7 +13,7 @@
     "webpack",
     "javascript"
   ],
-  "author": "Makshanov Ilya <for@example.com>",
+  "author": "Makshanov Ilya <MrPerec@yandex.com>",
   "license": "SPDX",
   "devDependencies": {
     "@babel/cli": "^7.12.10",

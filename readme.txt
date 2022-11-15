@@ -8,7 +8,7 @@ It can do the following:
 
 To run the application, you need to build it using webpack and other libraries, for this, follow these steps
 1. Install packages "npm install";
-2. After installing the packages, run the "npm run build" command, wait for the build to finish and run the "index.html" file.
+2. After installing the packages, run the "npm run build" command, wait for the build to finish and run the "build\index.html" file.
 
 You can also view the source non-minified code by running "npm run dev"
 Or do real-time development with the server, "npm run server" command
