@@ -6,7 +6,7 @@ import { STORAGE_COMMENTS } from './constants/constants.js';
 export default class App extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.onChangeComment = this.onChangeComment.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.addComment = this.addComment.bind(this);
     this.deleteComment = this.deleteComment.bind(this);
 
@@ -30,40 +30,44 @@ export default class App extends React.PureComponent {
     if (savedComments !== null) this.setState({ comments: savedComments });
   }
 
-  onChangeComment = (event) => this.setState({ [event.target.name]: event.target.value });
+  onChange = (event) => this.setState({ [event.target.name]: event.target.value });
 
   addComment(event) {
     event.preventDefault();
 
     const { comments, authorInputValue, commentInputValue } = this.state;
-    const commentsCopy = [...comments];
-    const now = new Date();
-    const date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
-    const time = now.toLocaleTimeString();
-    const nowDateTime = `${date} ${time}`;
-    const uuid = getUuid();
 
-    commentsCopy.unshift({
-      author: authorInputValue,
-      text: commentInputValue,
-      dateTime: nowDateTime,
-      id: uuid,
-    });
+    if (authorInputValue.trim() || commentInputValue.trim()) {
+      const commentsCopy = [...comments];
+      const now = new Date();
+      const date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+      const time = now.toLocaleTimeString();
+      const nowDateTime = `${date} ${time}`;
+      const uuid = getUuid();
 
-    this.setState({
-      comments: commentsCopy,
-      authorInputValue: String(),
-      commentInputValue: String(),
-    });
+      commentsCopy.unshift({
+        author: authorInputValue,
+        text: commentInputValue,
+        dateTime: nowDateTime,
+        id: uuid,
+      });
 
-    localStorage.setItem(STORAGE_COMMENTS, JSON.stringify(commentsCopy));
+      this.setState({
+        comments: commentsCopy,
+        authorInputValue: String(),
+        commentInputValue: String(),
+      });
+
+      localStorage.setItem(STORAGE_COMMENTS, JSON.stringify(commentsCopy));
+    } else {
+      alert(`Please fill out those fields.`);
+    }
   }
 
   deleteComment(key) {
     const comments = this.state.comments.filter((elem) => elem.id !== key);
 
     this.setState({ comments });
-
     localStorage.setItem(STORAGE_COMMENTS, JSON.stringify(comments));
   }
 
@@ -74,7 +78,7 @@ export default class App extends React.PureComponent {
         <CommentInput
           authorInputValue={authorInputValue}
           commentInputValue={commentInputValue}
-          onChangeComment={this.onChangeComment}
+          onChange={this.onChange}
           addComment={this.addComment}
         />
         <CommentsList comments={comments} deleteComment={this.deleteComment} />
