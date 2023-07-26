@@ -3,12 +3,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import '../styles/style.css';
-import { FIELD_WIDTH, FIELD_HEIGHT } from '../constants/constants.js';
+import { FIELD_WIDTH, FIELD_HEIGHT } from '../constants.js';
 
-function CommentInput({ authorInputValue, commentInputValue, onChange, addComment }) {
+function CommentInput({ inputValues, onChange, addComment }) {
+  const { authorInputValue, commentInputValue } = inputValues;
+
   return (
     <form onSubmit={addComment}>
-      <input required name='authorInputValue' type='text' size={FIELD_WIDTH} placeholder='Name' value={authorInputValue} onChange={onChange} />
+      <input
+        required
+        name='authorInputValue'
+        type='text'
+        size={FIELD_WIDTH}
+        placeholder='Name'
+        value={authorInputValue}
+        onChange={onChange}
+      />
       <textarea
         required
         name='commentInputValue'
@@ -24,9 +34,8 @@ function CommentInput({ authorInputValue, commentInputValue, onChange, addCommen
 }
 
 CommentInput.propTypes = {
+  inputValues: PropTypes.object.isRequired,
   addComment: PropTypes.func.isRequired,
-  authorInputValue: PropTypes.string.isRequired,
-  commentInputValue: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 

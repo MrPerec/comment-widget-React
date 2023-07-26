@@ -1,59 +1,61 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import CommentInput from './components/CommentInput.js';
 import CommentsList from './components/CommentsList.js';
-import { STORAGE_COMMENTS } from './constants/constants.js';
+import { STORAGE_COMMENTS } from './constants.js';
+import { getUuid, getCurrentDateTime } from './utils.js';
 
-export default class App extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.onChange = this.onChange.bind(this);
-    this.addComment = this.addComment.bind(this);
-    this.deleteComment = this.deleteComment.bind(this);
+export default function App() {
+  const [comments, setComments] = useState([
+    {
+      id: Number(),
+      author: String(),
+      text: String(),
+      dateTime: Date(),
+    },
+  ]);
 
-    this.state = {
-      comments: [
-        {
-          id: Number(),
-          author: String(),
-          text: String(),
-          dateTime: Date(),
-        },
-      ],
+  const [inputValues, setInputValues] = useState({
+    authorInputValue: String(),
+    commentInputValue: String(),
+  });
 
-      authorInputValue: String(),
-      commentInputValue: String(),
-    };
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     const savedComments = JSON.parse(localStorage.getItem(STORAGE_COMMENTS));
-    if (savedComments !== null) this.setState({ comments: savedComments });
-  }
+    if (savedComments !== null) setComments(savedComments);
+  }, []);
 
-  onChange = (event) => this.setState({ [event.target.name]: event.target.value });
+  const handleOnChange = (event) => {
+    const { name, value } = event.target;
+    setInputValues({ ...inputValues, [name]: value });
+  };
 
-  addComment(event) {
+  const handeDeleteComment = (commentId) => {
+    const commentsWithoutDeletedComments = comments.filter((elem) => elem.id !== commentId);
+
+    setComments(commentsWithoutDeletedComments);
+    localStorage.setItem(STORAGE_COMMENTS, JSON.stringify(commentsWithoutDeletedComments));
+  };
+
+  const handleAddComment = (event) => {
     event.preventDefault();
-
-    const { comments, authorInputValue, commentInputValue } = this.state;
+    const { authorInputValue, commentInputValue } = inputValues;
 
     if (authorInputValue.trim() || commentInputValue.trim()) {
-      const commentsCopy = [...comments];
-      const now = new Date();
-      const date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
-      const time = now.toLocaleTimeString();
-      const nowDateTime = `${date} ${time}`;
       const uuid = getUuid();
-
-      commentsCopy.unshift({
+      const currentDateTime = getCurrentDateTime();
+      const newComment = {
         author: authorInputValue,
         text: commentInputValue,
-        dateTime: nowDateTime,
+        dateTime: currentDateTime,
         id: uuid,
-      });
+      };
 
-      this.setState({
-        comments: commentsCopy,
+      setComments((prevComments) => [newComment, ...prevComments]);
+
+      const commentsCopy = [newComment, ...comments];
+
+      setInputValues({
         authorInputValue: String(),
         commentInputValue: String(),
       });
@@ -62,30 +64,12 @@ export default class App extends React.PureComponent {
     } else {
       alert(`Please fill out those fields.`);
     }
-  }
+  };
 
-  deleteComment(key) {
-    const comments = this.state.comments.filter((elem) => elem.id !== key);
-
-    this.setState({ comments });
-    localStorage.setItem(STORAGE_COMMENTS, JSON.stringify(comments));
-  }
-
-  render() {
-    const { comments, authorInputValue, commentInputValue } = this.state;
-    return (
-      <div>
-        <CommentInput
-          authorInputValue={authorInputValue}
-          commentInputValue={commentInputValue}
-          onChange={this.onChange}
-          addComment={this.addComment}
-        />
-        <CommentsList comments={comments} deleteComment={this.deleteComment} />
-      </div>
-    );
-  }
+  return (
+    <div>
+      <CommentInput inputValues={inputValues} onChange={handleOnChange} addComment={handleAddComment} />
+      <CommentsList comments={comments} deleteComment={handeDeleteComment} />
+    </div>
+  );
 }
-
-const getUuid = () =>
-  ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) => (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
