@@ -3,22 +3,11 @@ import { useState, useEffect } from 'react';
 import CommentInput from './components/CommentInput.js';
 import CommentsList from './components/CommentsList.js';
 import { STORAGE_COMMENTS } from './constants.js';
-import { getUuid, getCurrentDateTime } from './utils.js';
+import { getUuid } from './utils.js';
 
 export default function App() {
-  const [comments, setComments] = useState([
-    {
-      id: Number(),
-      author: String(),
-      text: String(),
-      dateTime: Date(),
-    },
-  ]);
-
-  const [inputValues, setInputValues] = useState({
-    authorInputValue: String(),
-    commentInputValue: String(),
-  });
+  const [comments, setComments] = useState([{ id: null, author: null, text: null, dateTime: null }]);
+  const [inputValues, setInputValues] = useState({ authorInputValue: String(), commentInputValue: String() });
 
   useEffect(() => {
     const savedComments = JSON.parse(localStorage.getItem(STORAGE_COMMENTS));
@@ -31,10 +20,10 @@ export default function App() {
   };
 
   const handeDeleteComment = (commentId) => {
-    const commentsWithoutDeletedComments = comments.filter((elem) => elem.id !== commentId);
+    const updatedComments = comments.filter((elem) => elem.id !== commentId);
 
-    setComments(commentsWithoutDeletedComments);
-    localStorage.setItem(STORAGE_COMMENTS, JSON.stringify(commentsWithoutDeletedComments));
+    setComments(updatedComments);
+    localStorage.setItem(STORAGE_COMMENTS, JSON.stringify(updatedComments));
   };
 
   const handleAddComment = (event) => {
@@ -42,13 +31,11 @@ export default function App() {
     const { authorInputValue, commentInputValue } = inputValues;
 
     if (authorInputValue.trim() || commentInputValue.trim()) {
-      const uuid = getUuid();
-      const currentDateTime = getCurrentDateTime();
       const newComment = {
         author: authorInputValue,
         text: commentInputValue,
-        dateTime: currentDateTime,
-        id: uuid,
+        dateTime: new Date().toLocaleString(),
+        id: getUuid(),
       };
 
       setComments((prevComments) => [newComment, ...prevComments]);
