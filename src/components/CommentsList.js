@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import CommentDisplay from './CommentDisplay.jsx';
+import CommentDisplay from './CommentDisplay.js';
 
 function CommentsList({ comments, deleteComment }) {
   const commentsList = comments.map(({ author, text, dateTime, id }) => {

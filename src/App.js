@@ -5,8 +5,8 @@
 
 import React from 'react';
 import { useState, useEffect } from 'react';
-import CommentInput from './components/CommentInput.jsx';
-import CommentsList from './components/CommentsList.jsx';
+import CommentInput from './components/CommentInput.js';
+import CommentsList from './components/CommentsList.js';
 import { STORAGE_COMMENTS } from './constants.js';
 import { getUuid } from './utils.js'; // Добавьте комментарий JSDoc к импорту
 
