@@ -54,9 +54,9 @@ export default function App() {
   };
 
   return (
-    <div>
+    <main>
       <CommentInput inputValues={inputValues} onChange={handleOnChange} addComment={handleAddComment} />
       <CommentsList comments={comments} deleteComment={handeDeleteComment} />
-    </div>
+    </main>
   );
 }
