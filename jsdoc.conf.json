@@ -1,22 +1,21 @@
 {
-  "recurseDepth": 10,
-  "plugins": ["plugins/markdown", "plugins/summarize"],
   "source": {
     "include": ["src"],
     "includePattern": ".+\\.js(doc|x)?$",
     "excludePattern": "(node_modules/|docs)"
   },
   "sourceType": "module",
+  "plugins": ["plugins/markdown", "node_modules/better-docs/category", "node_modules/better-docs/component"],
   "tags": {
     "allowUnknownTags": true,
     "dictionaries": ["jsdoc", "closure"]
   },
   "templates": {
-    "cleverLinks": true,
-    "monospaceLinks": true
+    "cleverLinks": false,
+    "monospaceLinks": false
   },
   "opts": {
-    "recurse": true,
+    "template": "node_modules/better-docs",
     "destination": "./docs/"
   }
 }
